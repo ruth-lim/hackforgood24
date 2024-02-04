@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "126776609699",
+    "project_id": "hackforgood-6bffd",
+    "storage_bucket": "hackforgood-6bffd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126776609699:android:64399965528b3fe6206816",
+        "android_client_info": {
+          "package_name": "com.example.hackforgood24"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS1MqjmKCRFShLm3t-kXz7i6l2XHrUnYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

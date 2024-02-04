@@ -46,10 +46,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _passwordController.text,
       );
 
-      await _firestore.collection('users').doc(userCredential.user!.uid).set({
+      // Determine user based on email domain to separate into distinct collections
+      bool isAdmin = _emailController.text.endsWith("@bigatheart.com");
+      String collectionPath = isAdmin ? 'admins' : 'users';
+
+      await _firestore
+          .collection(collectionPath)
+          .doc(userCredential.user!.uid)
+          .set({
         'email': _emailController.text,
         'username': _usernameController.text,
-        'onboardingCompleted': false,
+        'onboardingCompleted': isAdmin ? true : false,
       });
 
       // Display success message

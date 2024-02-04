@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
@@ -9,7 +10,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   var _isLoading = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -19,17 +22,32 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
     try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
       // Check the user's role and navigate to the correct interface
       final user = userCredential.user;
       if (user != null) {
         if (user.email!.endsWith('@bigatheart.com')) {
           Navigator.of(context).pushReplacementNamed('/admin_dashboard');
         } else {
-          Navigator.of(context).pushReplacementNamed('/volunteer_dashboard');
+          // Fetch user document to check if onboarding is completed
+          final userDoc = await _firestore
+              .collection('users')
+              .doc(userCredential.user!.uid)
+              .get();
+
+          if (userDoc.exists &&
+              userDoc.data()!['onboardingCompleted'] != true) {
+            // Navigate to OnboardingScreen if onboarding is not completed
+            Navigator.of(context).pushReplacementNamed('/onboarding');
+          } else {
+            // Navigate to the volunteer dashboard
+            Navigator.of(context).pushReplacementNamed('/volunteer_dashboard');
+          }
         }
       }
     } on FirebaseAuthException catch (error) {

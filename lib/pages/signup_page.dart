@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const routeName = '/signup';
@@ -9,10 +10,13 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final _auth = FirebaseAuth.instance;
-  var _isLoading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
+
+  var _isLoading = false;
   final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -32,15 +36,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
-      await _auth.createUserWithEmailAndPassword(
+      setState(() => _isLoading = true);
+
+      // Create user
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
+
+      await _firestore.collection('users').doc(userCredential.user!.uid).set({
+        'email': _emailController.text,
+        'username': _usernameController.text,
+        'onboardingCompleted': false,
+      });
 
       // Display success message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,10 +75,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
     } catch (e) {
       print(e);
+    } finally {
+      setState(() => _isLoading = false);
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -96,7 +105,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
+
                     const SizedBox(height: 48),
+
+                    // Email input
                     TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(
@@ -111,7 +123,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
+
                     const SizedBox(height: 16),
+
+                    // Username input
+                    TextFormField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Username',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a username!';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Password input
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,

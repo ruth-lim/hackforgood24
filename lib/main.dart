@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:hackforgood24/pages/admin_dashboard.dart';
+import 'package:hackforgood24/pages/admin/admin_dashboard.dart';
 import 'package:hackforgood24/pages/login_page.dart';
-import 'package:hackforgood24/pages/volunteer_dashboard.dart';
+import 'package:hackforgood24/pages/volunteer/volunteer_dashboard.dart';
+import 'package:hackforgood24/pages/volunteer/volunteer_onboarding.dart';
 import 'pages/signup_page.dart';
 
 void main() async {
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
         SignUpScreen.routeName: (ctx) => SignUpScreen(),
         LoginScreen.routeName: (ctx) => LoginScreen(),
+        OnboardingScreen.routeName: (ctx) => OnboardingScreen(),
         VolunteerDashboard.routeName: (ctx) => VolunteerDashboard(),
         AdminDashboard.routeName: (ctx) => AdminDashboard(),
       },

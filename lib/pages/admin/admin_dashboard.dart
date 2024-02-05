@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'bottom_navigation_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AdminDashboard extends StatefulWidget {
   static const routeName = '/admin_dashboard';
@@ -9,6 +10,7 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -29,6 +31,39 @@ class _AdminDashboardState extends State<AdminDashboard> {
     }
   }
 
+  Future<int> _fetchTotalVolunteersCount() async {
+    final querySnapshot = await _firestore.collection('users').get();
+    return querySnapshot.docs.length;
+  }
+
+  // Get total volunteers from cloud firestore
+  Widget _buildTotalVolunteersCount() {
+    return FutureBuilder<int>(
+      future: _fetchTotalVolunteersCount(),
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text(
+            'Loading total volunteers...',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+            'Error fetching total volunteers',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          );
+        } else {
+          return Text(
+            'Total Volunteers: ${snapshot.data}',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,12 +77,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // Display total volunteers and upcoming events
-            Text(
-              'Total Volunteers: XXXX',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
+            _buildTotalVolunteersCount(),
             Text(
               'No. of events upcoming: XX',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -55,35 +85,83 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             SizedBox(height: 48),
 
-            // Button for Volunteers' Administration
+            // Button for Volunteers Management
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/volunteers_management');
               },
-              child: Text('Volunteers\' Administration'),
-              style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
+              child: Text(
+                'Volunteers\' Management',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFF4FFF1),
+                onPrimary: Colors.black,
+                side: BorderSide(color: Colors.black, width: 1.0),
+                minimumSize: Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 25.0),
+              ),
             ),
 
-            SizedBox(height: 16),
+            SizedBox(height: 30),
 
             // Button for Events' Management
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/events_management');
               },
-              child: Text('Events\' Management'),
-              style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
+              child: Text(
+                'Events\' Management',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFFFD3D3),
+                onPrimary: Colors.black,
+                side: BorderSide(color: Colors.black, width: 1.0),
+                minimumSize: Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 25.0),
+              ),
             ),
 
-            SizedBox(height: 16),
+            SizedBox(height: 30),
 
             // Button for Report Generation
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/report_generation');
               },
-              child: Text('Report Generation'),
-              style: ElevatedButton.styleFrom(primary: Colors.purpleAccent),
+              child: Text(
+                'Report Generation',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFF9D3FF),
+                onPrimary: Colors.black,
+                side: BorderSide(color: Colors.black, width: 1.0),
+                minimumSize: Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 25.0),
+              ),
             ),
 
             SizedBox(height: 48),

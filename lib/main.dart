@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hackforgood24/pages/admin/admin_dashboard.dart';
 import 'package:hackforgood24/pages/admin/admin_events.dart';
 import 'package:hackforgood24/pages/admin/admin_profile.dart';
+import 'package:hackforgood24/pages/admin/event_registration.dart';
 import 'package:hackforgood24/pages/admin/events_management.dart';
 import 'package:hackforgood24/pages/admin/volunteers_management.dart';
 import 'package:hackforgood24/pages/login_page.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         EventsManagement.routeName: (ctx) => EventsManagement(),
         AdminProfile.routeName: (ctx) => AdminProfile(),
         AdminEvents.routeName: (ctx) => AdminEvents(),
+        EventRegistration.routeName: (ctx) => EventRegistration(),
       },
     );
   }

@@ -68,7 +68,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Big at Heart - Admin Portal'),
+        title: Text('Big at Heart - Admin Portal',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            )),
         backgroundColor: Colors.red,
       ),
       body: Padding(
@@ -91,7 +94,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Navigator.pushNamed(context, '/volunteers_management');
               },
               child: Text(
-                'Volunteers\' Management',
+                'Volunteers Management',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -118,7 +121,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Navigator.pushNamed(context, '/events_management');
               },
               child: Text(
-                'Events\' Management',
+                'Events Management',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,

@@ -173,7 +173,7 @@ class _EventRegistrationState extends State<EventRegistration> {
   // Save event into firebase
   void _uploadEvent() async {
     if (!_formKey.currentState!.validate()) {
-      print('Form is not valid');
+      _showErrorMessage('Please fill in all fields!');
       return;
     }
 
@@ -187,25 +187,18 @@ class _EventRegistrationState extends State<EventRegistration> {
 
     // Ensure event is in future
     if (eventDateTime.isBefore(DateTime.now())) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Event scheduled must be in the future.')),
-      );
+      _showErrorMessage('Event scheduled must be in the future.');
       return;
     }
 
     if (_image == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an image for the event.')),
-      );
+      _showErrorMessage('Please select an image for the event.');
       return;
     }
 
     final imageUrl = await _uploadImage();
     if (imageUrl == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to upload image.')),
-      );
-      return;
+      _showErrorMessage('Failed to upload image.');
     }
 
     // Check for duplicate events
@@ -217,11 +210,12 @@ class _EventRegistrationState extends State<EventRegistration> {
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text(
-                'An event with the same title, date, and location already exists.')),
-      );
+      _showErrorMessage(
+          'An event with the same title, date, and location already exists.');
+    }
+
+    bool? confirmed = await _showConfirmationDialog(context);
+    if (!confirmed!) {
       return;
     }
 
@@ -249,12 +243,51 @@ class _EventRegistrationState extends State<EventRegistration> {
     Navigator.of(context).pop();
   }
 
+  Future<bool?> _showConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm save'),
+          content: const Text(
+            'Are you sure you want to save this event?',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showSuccessMessage(String message) {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.CENTER,
       backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
+  }
+
+  void _showErrorMessage(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.red,
       textColor: Colors.white,
     );
   }

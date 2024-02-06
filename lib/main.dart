@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         AdminEvents.routeName: (ctx) => AdminEvents(),
         EventRegistration.routeName: (ctx) => EventRegistration(),
       },
+      debugShowCheckedModeBanner: false,
     );
   }
 }

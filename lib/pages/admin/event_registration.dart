@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -63,11 +64,14 @@ class _EventRegistrationState extends State<EventRegistration> {
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
+    setState(() {
+      if (pickedFile != null) {
         _image = File(pickedFile.path);
-      });
-    }
+        _uploadImage();
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 
   Future<String?> _uploadImage() async {
@@ -81,13 +85,12 @@ class _EventRegistrationState extends State<EventRegistration> {
     }
 
     final fileName = path.basename(_image!.path);
-    final destination = 'event_images/$fileName';
+    final destination = 'events/event_images/$fileName';
 
     try {
       final ref = FirebaseStorage.instance.ref(destination);
-      final uploadTask = ref.putFile(_image!);
-      final snapshot = await uploadTask.whenComplete(() {});
-      final downloadUrl = await snapshot.ref.getDownloadURL();
+      final uploadTask = await ref.putFile(_image!);
+      final downloadUrl = await uploadTask.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
       print(e);
@@ -96,37 +99,46 @@ class _EventRegistrationState extends State<EventRegistration> {
   }
 
   void _uploadEvent() async {
-    if (_formKey.currentState!.validate()) {
-      final imageUrl = await _uploadImage();
-      if (imageUrl == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No image selected.')),
-        );
-        return;
-      }
-
-      // Upload event data to Firestore
-      final eventCollection = _firestore.collection('events');
-      final eventId = eventCollection.doc().id;
-
-      await eventCollection.doc(eventId).set({
-        'title': _titleController.text,
-        'volunteersNeeded': _volunteersNeededController.text,
-        'organisation': _organisationController.text,
-        'location': _locationController.text,
-        'date': _dateController.text,
-        'skillsNeeded': _skillsNeededController.text,
-        'interestsInvolved': _interestsInvolvedController.text,
-        'description': _descriptionController.text,
-        'imageURL': imageUrl,
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Event Uploaded Successfully!')),
-      );
-
-      Navigator.of(context).pushReplacementNamed('/event_management');
+    if (!_formKey.currentState!.validate()) {
+      print('Form is not valid');
+      return;
     }
+
+    final imageUrl = await _uploadImage();
+    if (imageUrl == null) {
+      print('Image upload failed');
+      setState(() {
+        // Hide loading indicator
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Image upload failed.'),
+        ),
+      );
+      return;
+    }
+
+    // Upload event data to Firestore
+    final eventCollection = _firestore.collection('events');
+    final eventId = eventCollection.doc().id;
+
+    await eventCollection.doc(eventId).set({
+      'title': _titleController.text,
+      'volunteersNeeded': _volunteersNeededController.text,
+      'organisation': _organisationController.text,
+      'location': _locationController.text,
+      'date': _dateController.text,
+      'skillsNeeded': _skillsNeededController.text,
+      'interestsInvolved': _interestsInvolvedController.text,
+      'description': _descriptionController.text,
+      'imageURL': imageUrl,
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Event Uploaded Successfully!')),
+    );
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -147,6 +159,7 @@ class _EventRegistrationState extends State<EventRegistration> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (_image != null) Image.file(_image!),
+              SizedBox(height: 24),
               OutlinedButton(
                 onPressed: _pickImage,
                 child: Text('Choose Image'),
@@ -170,6 +183,10 @@ class _EventRegistrationState extends State<EventRegistration> {
               TextFormField(
                 controller: _volunteersNeededController,
                 decoration: InputDecoration(labelText: 'Volunteers Needed'),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the number of volunteers needed.';
@@ -196,6 +213,7 @@ class _EventRegistrationState extends State<EventRegistration> {
               TextFormField(
                 controller: _locationController,
                 decoration: InputDecoration(labelText: 'Location'),
+                maxLines: null,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the location of the event.';

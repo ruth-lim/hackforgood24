@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hackforgood24/models/skills_and_interests.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +18,7 @@ class EventRegistration extends StatefulWidget {
 
 class _EventRegistrationState extends State<EventRegistration> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final SkillsAndInterests _skillsAndInterests = SkillsAndInterests();
 
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
@@ -37,6 +39,19 @@ class _EventRegistrationState extends State<EventRegistration> {
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSkillsAndInterests();
+  }
+
+  Future<void> _fetchSkillsAndInterests() async {
+    _availableSkills = await _skillsAndInterests.fetchSkills();
+    _availableInterests = await _skillsAndInterests.fetchInterests();
+
+    setState(() {});
+  }
 
   Widget _buildSkillsChips() {
     return Wrap(
@@ -91,7 +106,7 @@ class _EventRegistrationState extends State<EventRegistration> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -111,11 +126,12 @@ class _EventRegistrationState extends State<EventRegistration> {
       context: context,
       initialTime: selectedTime,
     );
-    if (picked != null && picked != selectedTime)
+    if (picked != null && picked != selectedTime) {
       setState(() {
         selectedTime = picked;
         _timeController.text = selectedTime.format(context);
       });
+    }
   }
 
   Future<void> _pickImage() async {
@@ -133,7 +149,7 @@ class _EventRegistrationState extends State<EventRegistration> {
   Future<String?> _uploadImage() async {
     if (_image == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('No image selected.'),
         ),
       );
@@ -154,6 +170,7 @@ class _EventRegistrationState extends State<EventRegistration> {
     }
   }
 
+  // Save event into firebase
   void _uploadEvent() async {
     if (!_formKey.currentState!.validate()) {
       print('Form is not valid');
@@ -171,7 +188,7 @@ class _EventRegistrationState extends State<EventRegistration> {
     // Ensure event is in future
     if (eventDateTime.isBefore(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Event scheduled must be in the future.')),
+        const SnackBar(content: Text('Event scheduled must be in the future.')),
       );
       return;
     }
@@ -201,12 +218,16 @@ class _EventRegistrationState extends State<EventRegistration> {
 
     if (querySnapshot.docs.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
             content: Text(
                 'An event with the same title, date, and location already exists.')),
       );
       return;
     }
+
+    // Save selected skills and interests
+    final selectedSkills = _selectedSkills;
+    final selectedInterests = _selectedInterests;
 
     // Upload event data to Firestore
     final eventId = eventCollection.doc().id;
@@ -217,17 +238,25 @@ class _EventRegistrationState extends State<EventRegistration> {
       'organisation': _organisationController.text,
       'location': _locationController.text,
       'dateTime': eventDateTime,
-      'skillsNeeded': _skillsNeededController.text,
-      'interestsInvolved': _interestsInvolvedController.text,
+      'skillsNeeded': selectedSkills,
+      'interestsInvolved': selectedInterests,
       'description': _descriptionController.text,
       'imageURL': imageUrl,
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Event Uploaded Successfully!')),
-    );
+    _showSuccessMessage('Event Uploaded Successfully!');
 
     Navigator.of(context).pop();
+  }
+
+  void _showSuccessMessage(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
   }
 
   @override
@@ -359,13 +388,12 @@ class _EventRegistrationState extends State<EventRegistration> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text('Skills Needed'),
                   ),
-                  _buildSkillsChips(),
+                  _buildSkillsChips(), // Display skills as chips here
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text('Interests Involved'),
                   ),
-                  _buildInterestsChips(),
-                  // ... other form fields ...
+                  _buildInterestsChips(), // Display interests as chips here
                 ],
               ),
               SizedBox(height: 24),

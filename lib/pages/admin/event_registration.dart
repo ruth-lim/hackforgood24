@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hackforgood24/models/skills_and_interests.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +20,6 @@ class _EventRegistrationState extends State<EventRegistration> {
 
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
-  final _volunteersNeededController = TextEditingController();
   final _organisationController = TextEditingController();
   final _locationController = TextEditingController();
   final _dateController = TextEditingController();
@@ -27,12 +27,68 @@ class _EventRegistrationState extends State<EventRegistration> {
   final _skillsNeededController = TextEditingController();
   final _interestsInvolvedController = TextEditingController();
   final _descriptionController = TextEditingController();
-
+  int? _volunteersNeeded;
+  List<String> _availableSkills = [];
+  List<String> _selectedSkills = [];
+  List<String> _availableInterests = [];
+  List<String> _selectedInterests = [];
   File? _image;
   final ImagePicker picker = ImagePicker();
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+
+  Widget _buildSkillsChips() {
+    return Wrap(
+      spacing: 8.0,
+      children: List<Widget>.generate(
+        _availableSkills.length,
+        (int index) {
+          return ChoiceChip(
+            label: Text(_availableSkills[index]),
+            selected: _selectedSkills.contains(_availableSkills[index]),
+            onSelected: (bool selected) {
+              setState(() {
+                if (selected) {
+                  _selectedSkills.add(_availableSkills[index]);
+                } else {
+                  _selectedSkills.removeWhere((String name) {
+                    return name == _availableSkills[index];
+                  });
+                }
+              });
+            },
+          );
+        },
+      ).toList(),
+    );
+  }
+
+  Widget _buildInterestsChips() {
+    return Wrap(
+      spacing: 8.0,
+      children: List<Widget>.generate(
+        _availableInterests.length,
+        (int index) {
+          return ChoiceChip(
+            label: Text(_availableInterests[index]),
+            selected: _selectedInterests.contains(_availableInterests[index]),
+            onSelected: (bool selected) {
+              setState(() {
+                if (selected) {
+                  _selectedInterests.add(_availableInterests[index]);
+                } else {
+                  _selectedInterests.removeWhere((String name) {
+                    return name == _availableInterests[index];
+                  });
+                }
+              });
+            },
+          );
+        },
+      ).toList(),
+    );
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     FocusScope.of(context).requestFocus(new FocusNode());
@@ -157,7 +213,7 @@ class _EventRegistrationState extends State<EventRegistration> {
 
     await eventCollection.doc(eventId).set({
       'title': _titleController.text,
-      'volunteersNeeded': _volunteersNeededController.text,
+      'volunteersNeeded': _volunteersNeeded,
       'organisation': _organisationController.text,
       'location': _locationController.text,
       'dateTime': eventDateTime,
@@ -214,15 +270,22 @@ class _EventRegistrationState extends State<EventRegistration> {
 
               // Volunteers Needed
               TextFormField(
-                controller: _volunteersNeededController,
-                decoration: InputDecoration(labelText: 'Volunteers Needed'),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
                 ],
+                decoration: InputDecoration(labelText: 'Volunteers Needed'),
+                onChanged: (value) {
+                  setState(() {
+                    _volunteersNeeded = int.tryParse(value);
+                  });
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the number of volunteers needed.';
+                  }
+                  if (_volunteersNeeded == null) {
+                    return 'Please enter a valid number.';
                   }
                   return null;
                 },
@@ -289,28 +352,21 @@ class _EventRegistrationState extends State<EventRegistration> {
               SizedBox(height: 24),
 
               // Skills
-              TextFormField(
-                controller: _skillsNeededController,
-                decoration: InputDecoration(labelText: 'Skills Needed'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the skills needed for the event.';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 24),
-
-              // Interests
-              TextFormField(
-                controller: _interestsInvolvedController,
-                decoration: InputDecoration(labelText: 'Interests Involved'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the interests involved in the event.';
-                  }
-                  return null;
-                },
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text('Skills Needed'),
+                  ),
+                  _buildSkillsChips(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text('Interests Involved'),
+                  ),
+                  _buildInterestsChips(),
+                  // ... other form fields ...
+                ],
               ),
               SizedBox(height: 24),
 

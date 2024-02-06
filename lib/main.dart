@@ -4,7 +4,9 @@ import 'package:hackforgood24/pages/admin/admin_dashboard.dart';
 import 'package:hackforgood24/pages/admin/admin_events.dart';
 import 'package:hackforgood24/pages/admin/admin_profile.dart';
 import 'package:hackforgood24/pages/admin/event_registration.dart';
+import 'package:hackforgood24/pages/admin/events_database.dart';
 import 'package:hackforgood24/pages/admin/events_management.dart';
+import 'package:hackforgood24/pages/admin/skills_interests_management.dart';
 import 'package:hackforgood24/pages/admin/volunteers_management.dart';
 import 'package:hackforgood24/pages/login_page.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_dashboard.dart';
@@ -37,6 +39,9 @@ class MyApp extends StatelessWidget {
         AdminProfile.routeName: (ctx) => AdminProfile(),
         AdminEvents.routeName: (ctx) => AdminEvents(),
         EventRegistration.routeName: (ctx) => EventRegistration(),
+        EventDatabase.routeName: (ctx) => EventDatabase(),
+        SkillsInterestsManagement.routeName: (ctx) =>
+            SkillsInterestsManagement(),
       },
       debugShowCheckedModeBanner: false,
     );

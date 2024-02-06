@@ -20,7 +20,7 @@ class EventsManagement extends StatelessWidget {
 
   void navigateToAssignVolunteers(BuildContext context) {
     // Navigate to volunteer assignment screen
-    Navigator.of(context).pushNamed('/assign_volunteers');
+    Navigator.of(context).pushNamed('/manage_skills_and_interests');
   }
 
   @override
@@ -42,7 +42,7 @@ class EventsManagement extends StatelessWidget {
             ElevatedButton(
               onPressed: () => navigateToEventRegistration(context),
               child: Text(
-                'Event Registration',
+                'Add New Event',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -63,7 +63,7 @@ class EventsManagement extends StatelessWidget {
             ElevatedButton(
               onPressed: () => navigateToEventDatabase(context),
               child: Text(
-                'Event Database',
+                'View All Events',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -105,7 +105,7 @@ class EventsManagement extends StatelessWidget {
             ElevatedButton(
               onPressed: () => navigateToAssignVolunteers(context),
               child: Text(
-                'Assigning Volunteers',
+                'Manage Skills and Interests',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,

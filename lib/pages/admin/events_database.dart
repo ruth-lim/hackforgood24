@@ -55,8 +55,16 @@ class EventCard extends StatelessWidget {
           );
         },
         title: Text(event.title),
-        subtitle: Text('${event.organization}\n${event.date} ${event.time}'),
-        trailing: Text('Volunteers Needed: ${event.volunteersNeeded}'),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Organization: ${event.organization}'),
+            Text('Date & Time: ${event.date} ${event.time}'),
+            Text('Volunteers Needed: ${event.volunteersNeeded}'),
+            Text('Skills Needed: ${event.skillsNeeded.join(', ')}'),
+            Text('Interests Involved: ${event.interestsInvolved.join(', ')}'),
+          ],
+        ),
       ),
     );
   }

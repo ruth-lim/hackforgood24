@@ -26,8 +26,6 @@ class _EventRegistrationState extends State<EventRegistration> {
   final _locationController = TextEditingController();
   final _dateController = TextEditingController();
   final _timeController = TextEditingController();
-  final _skillsNeededController = TextEditingController();
-  final _interestsInvolvedController = TextEditingController();
   final _descriptionController = TextEditingController();
   int? _volunteersNeeded;
   List<String> _availableSkills = [];

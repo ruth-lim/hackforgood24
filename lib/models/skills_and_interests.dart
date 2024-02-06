@@ -15,26 +15,30 @@ class SkillsAndInterests {
   Future<void> addSkill(String skill) async {
     bool skillExists = await skillExistsWithName(skill);
 
+    String formattedSkill =
+        skill[0].toUpperCase() + skill.substring(1).toLowerCase();
     if (skillExists) {
-      _showErrorMessage('Error: Skill $skill already exists.');
+      _showErrorMessage('Error: Skill $formattedSkill already exists.');
     } else {
-      await _firestore.collection('skills').add({'name': skill});
-      _showSuccessMessage('Skill: $skill added!');
+      await _firestore.collection('skills').add({'name': formattedSkill});
+      _showSuccessMessage('Skill: $formattedSkill added!');
     }
   }
 
   // Remove a skill
   Future<void> removeSkill(String skillName) async {
+    String formattedSkill =
+        skillName[0].toUpperCase() + skillName.substring(1).toLowerCase();
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('skills')
-        .where('name', isEqualTo: skillName)
+        .where('name', isEqualTo: formattedSkill)
         .get();
 
     if (querySnapshot.docs.isEmpty) {
-      _showErrorMessage('Error: Something went wrong deleting $skillName');
+      _showErrorMessage('Error: Something went wrong deleting $skillName.');
     } else {
       await querySnapshot.docs.first.reference.delete();
-      String message = 'Skill: $skillName deleted!';
+      String message = 'Skill: $formattedSkill deleted!';
       _showSuccessMessage(message);
     }
   }
@@ -48,12 +52,14 @@ class SkillsAndInterests {
   // Add an interest
   Future<void> addInterest(String interest) async {
     bool interestExists = await interestExistsWithName(interest);
-
+    String formattedInterest =
+        interest[0].toUpperCase() + interest.substring(1).toLowerCase();
     if (interestExists) {
-      return _showErrorMessage('Error: Interest $interest already exists.');
+      return _showErrorMessage(
+          'Error: Interest $formattedInterest already exists.');
     } else {
-      await _firestore.collection('interests').add({'name': interest});
-      _showSuccessMessage('Interest: $interest added!');
+      await _firestore.collection('interests').add({'name': formattedInterest});
+      _showSuccessMessage('Interest: $formattedInterest added!');
     }
   }
 
@@ -65,7 +71,7 @@ class SkillsAndInterests {
         .get();
 
     if (querySnapshot.docs.isEmpty) {
-      _showErrorMessage('Error: Something went wrong deleting $interestName');
+      _showErrorMessage('Error: Something went wrong deleting $interestName.');
     } else {
       await querySnapshot.docs.first.reference.delete();
       String message = 'Interest: $interestName deleted!';

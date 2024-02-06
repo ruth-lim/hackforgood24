@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hackforgood24/models/skills_and_interests.dart';
 
 class SkillsInterestsManagement extends StatefulWidget {
@@ -12,9 +12,7 @@ class SkillsInterestsManagement extends StatefulWidget {
 }
 
 class _SkillsInterestsManagementState extends State<SkillsInterestsManagement> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final SkillsAndInterests _skillsAndInterests = SkillsAndInterests();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> _skills = [];
   List<String> _interests = [];
 
@@ -31,21 +29,20 @@ class _SkillsInterestsManagementState extends State<SkillsInterestsManagement> {
   }
 
   Future<void> _addNewItem(BuildContext context, String type) async {
-    final TextEditingController controller = TextEditingController();
-    final String title =
+    final TextEditingController _newItemController = TextEditingController();
+    final String dialogTitle =
         (type == 'skill') ? 'Add New Skill' : 'Add New Interest';
-    final String hintText =
-        (type == 'skill') ? 'Enter skill' : 'Enter interest';
 
-    // Show dialog to input new skill or interest
-    final String? newItemName = await showDialog<String>(
+    showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
-          title: Text(title),
+          title: Text(dialogTitle),
           content: TextField(
-            controller: controller,
-            decoration: InputDecoration(hintText: hintText),
+            controller: _newItemController,
+            decoration: InputDecoration(
+                hintText: "Enter ${type == 'skill' ? 'skill' : 'interest'}"),
+            autofocus: true,
           ),
           actions: <Widget>[
             TextButton(
@@ -55,13 +52,16 @@ class _SkillsInterestsManagementState extends State<SkillsInterestsManagement> {
             TextButton(
               child: Text('Add'),
               onPressed: () async {
-                if (type == 'skill') {
-                  await _skillsAndInterests.addSkill(controller.text);
-                } else {
-                  await _skillsAndInterests.addInterest(controller.text);
+                final item = _newItemController.text.trim();
+                if (item.isNotEmpty) {
+                  if (type == 'skill') {
+                    await _skillsAndInterests.addSkill(item);
+                  } else {
+                    await _skillsAndInterests.addInterest(item);
+                  }
+                  _fetchSkillsAndInterests();
+                  Navigator.of(context).pop();
                 }
-                _fetchSkillsAndInterests();
-                Navigator.of(context).pop();
               },
             ),
           ],
@@ -71,9 +71,9 @@ class _SkillsInterestsManagementState extends State<SkillsInterestsManagement> {
   }
 
   Future<void> _deleteItem(String itemName, String type) async {
-    bool? confirmed = await _showDeleteConfirmationDialog(context, itemName);
+    final bool? confirmDelete = await _showDeleteConfirmationDialog(itemName);
 
-    if (!confirmed!) {
+    if (!confirmDelete!) {
       return;
     }
 
@@ -85,104 +85,121 @@ class _SkillsInterestsManagementState extends State<SkillsInterestsManagement> {
     _fetchSkillsAndInterests();
   }
 
-  Future<bool?> _showDeleteConfirmationDialog(
-      BuildContext context, String itemName) async {
-    return await showDialog<bool>(
+  Future<bool?> _showDeleteConfirmationDialog(String itemName) async {
+    final result = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirm Delete'),
-          content: Text(
-            'Are you sure you want to delete this item: $itemName?',
-            style: const TextStyle(fontSize: 16),
-          ),
+          content: Text('Are you sure you want to delete "$itemName"?'),
           actions: <Widget>[
             TextButton(
               child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
+              onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
               child: Text('Delete'),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
+              onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
         );
       },
     );
+
+    return result;
   }
 
-  Widget _buildSkillInterestList(String type) {
-    List<String> itemList = (type == 'skill') ? _skills : _interests;
-
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            type == 'skill' ? 'Skills' : 'Interests',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          trailing: IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _addNewItem(context, type),
-          ),
-        ),
-        if (itemList.isEmpty)
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Center(
-              child: Text(
-                'No $type found. Add some $type to get started.',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
-        else
-          ...itemList.map((item) => ListTile(
-                title: Text(item),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () => _deleteItem(item, type),
-                ),
-              )),
-      ],
+  Widget _buildListTile(String title, IconData icon, String type) {
+    return ListTile(
+      title: Text(title),
+      leading: Icon(icon, color: Theme.of(context).primaryColor),
+      onTap: () => _deleteItem(title, type),
     );
+  }
+
+  Widget _buildSkillsInterestsList(String type, List<String> items) {
+    return ExpansionTile(
+        title: Text('${type.capitalize()} (${items.length})'),
+        initiallyExpanded: true,
+        children: [
+          if (items.isEmpty)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(
+                child: Text(
+                  'No $type found. Add some $type\s to get started.',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          else
+            ...items.map((item) {
+              return _buildListTile(item, Icons.delete, type);
+            }).toList(),
+        ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Manage Skills and Interests',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
-        backgroundColor: Color(0xFFFFD3D3),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildSkillInterestList('skill'),
-            SizedBox(height: 24),
-            const Divider(
-              height: 20,
-              thickness: 2,
-              color: Colors.grey,
-            ),
-            _buildSkillInterestList('interest'),
-          ],
+        title: Text(
+          'Manage Skills and Interests',
+          textAlign: TextAlign.center,
         ),
       ),
+      body: ListView(
+        children: [
+          _buildSkillsInterestsList('skill', _skills),
+          _buildSkillsInterestsList('interest', _interests),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddOptionDialog(context);
+        },
+        tooltip: 'Add Skill/Interest',
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  void _showAddOptionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add New'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.lightbulb_outline),
+                title: Text('Skill'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _addNewItem(context, 'skill');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.favorite_border),
+                title: Text('Interest'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _addNewItem(context, 'interest');
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }

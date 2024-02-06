@@ -13,11 +13,6 @@ class EventsManagement extends StatelessWidget {
     Navigator.of(context).pushNamed('/event_database');
   }
 
-  void navigateToEditEvent(BuildContext context) {
-    // Navigate to event editing screen
-    Navigator.of(context).pushNamed('/edit_event');
-  }
-
   void navigateToAssignVolunteers(BuildContext context) {
     // Navigate to volunteer assignment screen
     Navigator.of(context).pushNamed('/manage_skills_and_interests');
@@ -64,27 +59,6 @@ class EventsManagement extends StatelessWidget {
               onPressed: () => navigateToEventDatabase(context),
               child: Text(
                 'View All Events',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFFFFD3D3),
-                side: BorderSide(color: Colors.black, width: 1.0),
-                minimumSize: Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 25.0),
-              ),
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () => navigateToEditEvent(context),
-              child: Text(
-                'Editing of Uploaded Event',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,

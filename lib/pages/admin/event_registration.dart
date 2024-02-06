@@ -421,12 +421,12 @@ class _EventRegistrationState extends State<EventRegistration> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text('Skills Needed'),
                   ),
-                  _buildSkillsChips(), // Display skills as chips here
+                  _buildSkillsChips(),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text('Interests Involved'),
                   ),
-                  _buildInterestsChips(), // Display interests as chips here
+                  _buildInterestsChips(),
                 ],
               ),
               SizedBox(height: 24),
@@ -467,6 +467,7 @@ class _EventRegistrationState extends State<EventRegistration> {
                   padding: EdgeInsets.symmetric(vertical: 15),
                 ),
               ),
+              SizedBox(height: 50),
             ],
           ),
         ),

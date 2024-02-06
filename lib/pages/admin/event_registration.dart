@@ -104,22 +104,55 @@ class _EventRegistrationState extends State<EventRegistration> {
       return;
     }
 
+    final eventDateTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
+
+    // Ensure event is in future
+    if (eventDateTime.isBefore(DateTime.now())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Event scheduled must be in the future.')),
+      );
+      return;
+    }
+
+    if (_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select an image for the event.')),
+      );
+      return;
+    }
+
     final imageUrl = await _uploadImage();
     if (imageUrl == null) {
-      print('Image upload failed');
-      setState(() {
-        // Hide loading indicator
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload image.')),
+      );
+      return;
+    }
+
+    // Check for duplicate events
+    final eventCollection = _firestore.collection('events');
+    final querySnapshot = await eventCollection
+        .where('title', isEqualTo: _titleController.text)
+        .where('dateTime', isEqualTo: eventDateTime)
+        .where('location', isEqualTo: _locationController.text)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Image upload failed.'),
-        ),
+            content: Text(
+                'An event with the same title, date, and location already exists.')),
       );
       return;
     }
 
     // Upload event data to Firestore
-    final eventCollection = _firestore.collection('events');
     final eventId = eventCollection.doc().id;
 
     await eventCollection.doc(eventId).set({
@@ -127,7 +160,7 @@ class _EventRegistrationState extends State<EventRegistration> {
       'volunteersNeeded': _volunteersNeededController.text,
       'organisation': _organisationController.text,
       'location': _locationController.text,
-      'date': _dateController.text,
+      'dateTime': eventDateTime,
       'skillsNeeded': _skillsNeededController.text,
       'interestsInvolved': _interestsInvolvedController.text,
       'description': _descriptionController.text,

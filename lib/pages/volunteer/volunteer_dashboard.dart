@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackforgood24/pages/admin/bottom_navigation_bar.dart';
 
 class VolunteerDashboard extends StatefulWidget {
   static const routeName = '/volunteer_dashboard';
@@ -8,6 +9,25 @@ class VolunteerDashboard extends StatefulWidget {
 }
 
 class _VolunteerDashboardState extends State<VolunteerDashboard> {
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/volunteer_dashboard');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/volunteer_event_dashboard');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/admin_profile');
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,6 +113,10 @@ class _VolunteerDashboardState extends State<VolunteerDashboard> {
             _buildCardList(["Event 1", "Event 2", "Event 3", "Event 4"]),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemSelected: _onItemTapped,
       ),
     );
   }

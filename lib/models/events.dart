@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class Event {
-  final String id;
+  final String eventId;
   final String title;
   final String description;
   final String organisation;
@@ -15,7 +15,7 @@ class Event {
   final String imageFileName;
 
   Event({
-    required this.id,
+    required this.eventId,
     required this.title,
     required this.description,
     required this.organisation,
@@ -30,7 +30,7 @@ class Event {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'eventId': eventId,
       'title': title,
       'description': description,
       'organisation': organisation,
@@ -51,14 +51,14 @@ class Event {
     String formattedTime = DateFormat('HH:mm').format(dateTime);
 
     return Event(
-      id: map['id'] ?? '',
+      eventId: map['eventId'] ?? '',
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       organisation: map['organisation'] ?? '',
       location: map['location'] ?? '',
       date: formattedDate,
       time: formattedTime,
-      volunteersNeeded: map['volunteersNeeded']?.toInt() ?? 0,
+      volunteersNeeded: map['volunteersNeeded'],
       skillsNeeded: List<String>.from(map['skillsNeeded']),
       interestsInvolved: List<String>.from(map['interestsInvolved']),
       imageFileName: map['imageFileName'] ?? '',

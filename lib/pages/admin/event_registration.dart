@@ -224,6 +224,7 @@ class _EventRegistrationState extends State<EventRegistration> {
     final eventId = eventCollection.doc().id;
 
     await eventCollection.doc(eventId).set({
+      'eventId': eventId,
       'title': _titleController.text,
       'volunteersNeeded': _volunteersNeeded,
       'organisation': _organisationController.text,
@@ -336,7 +337,7 @@ class _EventRegistrationState extends State<EventRegistration> {
                 decoration: InputDecoration(labelText: 'Volunteers Needed'),
                 onChanged: (value) {
                   setState(() {
-                    _volunteersNeeded = int.tryParse(value);
+                    _volunteersNeeded = int.parse(value);
                   });
                 },
                 validator: (value) {

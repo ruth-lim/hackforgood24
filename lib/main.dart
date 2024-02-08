@@ -12,6 +12,7 @@ import 'package:hackforgood24/pages/login_page.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_dashboard.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_event_dashboard.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_onboarding.dart';
+import 'package:hackforgood24/pages/volunteer/volunteer_profile.dart';
 import 'pages/signup_page.dart';
 
 void main() async {
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         OnboardingScreen.routeName: (ctx) => OnboardingScreen(),
         VolunteerDashboard.routeName: (ctx) => VolunteerDashboard(),
         VolunteerEventDashboard.routeName: (ctx) => VolunteerEventDashboard(),
+        VolunteerProfile.routeName: (ctx) => VolunteerProfile(),
         AdminDashboard.routeName: (ctx) => AdminDashboard(),
         VolunteersManagement.routeName: (ctx) => VolunteersManagement(),
         EventsManagement.routeName: (ctx) => EventsManagement(),

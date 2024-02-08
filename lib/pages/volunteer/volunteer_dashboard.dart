@@ -23,7 +23,7 @@ class _VolunteerDashboardState extends State<VolunteerDashboard> {
         Navigator.pushReplacementNamed(context, '/volunteer_event_dashboard');
         break;
       case 2:
-        Navigator.pushReplacementNamed(context, '/admin_profile');
+        Navigator.pushReplacementNamed(context, '/volunteer_profile');
         break;
     }
   }

@@ -19,6 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
 
   void _submit() async {
     if (!_formKey.currentState!.validate()) {
@@ -46,17 +47,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _passwordController.text,
       );
 
-      // Determine user based on email domain to separate into distinct collections
-      bool isAdmin = _emailController.text.endsWith("@bigatheart.com");
-      String collectionPath = isAdmin ? 'admins' : 'users';
-
-      await _firestore
-          .collection(collectionPath)
-          .doc(userCredential.user!.uid)
-          .set({
+      await _firestore.collection('users').doc(userCredential.user!.uid).set({
         'email': _emailController.text,
         'username': _usernameController.text,
-        'onboardingCompleted': isAdmin ? true : false,
+        'phoneNumber': _phoneNumberController.text,
+        'onboardingCompleted': false,
       });
 
       // Display success message
@@ -112,9 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-
                     const SizedBox(height: 48),
-
                     // Email input
                     TextFormField(
                       controller: _emailController,
@@ -130,9 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
-
                     const SizedBox(height: 16),
-
                     // Username input
                     TextFormField(
                       controller: _usernameController,
@@ -147,9 +138,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
-
                     const SizedBox(height: 16),
-
+                    // Phone number input
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      decoration: const InputDecoration(
+                        labelText: 'Phone Number',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      validator: (value) {
+                        if (value!.isEmpty || value.length != 10) {
+                          return 'Please enter a valid phone number!';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
                     // Password input
                     TextFormField(
                       controller: _passwordController,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hackforgood24/models/events.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hackforgood24/pages/admin/event_edit_screen.dart';
 
 class EventDatabase extends StatelessWidget {
   static const routeName = '/event_database';
@@ -194,13 +195,37 @@ class EventCard extends StatelessWidget {
   }
 }
 
-class EventDetailScreen extends StatelessWidget {
+class EventDetailScreen extends StatefulWidget {
   final Event event;
 
   EventDetailScreen({required this.event});
 
   @override
+  _EventDetailScreenState createState() => _EventDetailScreenState();
+}
+
+class _EventDetailScreenState extends State<EventDetailScreen> {
+  late Event event;
+
+  @override
+  void initState() {
+    super.initState();
+    event = widget.event;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    TextStyle labelStyle = TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+    );
+
+    TextStyle contentStyle = TextStyle(
+      fontSize: 16,
+      color: Colors.black,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(event.title),
@@ -257,40 +282,77 @@ class EventDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                'Organisation: ${event.organisation}',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                'Location: ${event.location}',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                'Date: ${event.date}',
-                style: TextStyle(fontSize: 18),
+              Text('Organisation:', style: labelStyle),
+              Text(event.organisation, style: contentStyle),
+              SizedBox(height: 8),
+              Text('Volunteers Needed:', style: labelStyle),
+              Text(event.volunteersNeeded.toString(), style: contentStyle),
+              SizedBox(height: 8),
+              Text('Address:', style: labelStyle),
+              Text(event.location, style: contentStyle),
+              SizedBox(height: 8),
+              Text('Date:', style: labelStyle),
+              Text(event.date, style: contentStyle),
+              SizedBox(height: 8),
+              Text('Time:', style: labelStyle),
+              Text(event.time, style: contentStyle),
+              Divider(),
+              SizedBox(height: 8),
+              Text('Description:', style: labelStyle),
+              Text(event.description, style: contentStyle),
+              SizedBox(height: 8),
+              Text('Skills Needed:', style: labelStyle),
+              SizedBox(height: 4),
+              Wrap(
+                spacing: 8.0,
+                children: event.skillsNeeded.map((skill) {
+                  return Chip(
+                    label: Text(skill, style: contentStyle),
+                    backgroundColor: Colors.grey[200],
+                  );
+                }).toList(),
               ),
               SizedBox(height: 8),
-              Divider(),
-              Text(
-                'Description: ${event.description}',
-                style: TextStyle(fontSize: 18),
+              Text('Interests Involved:', style: labelStyle),
+              SizedBox(height: 4),
+              Wrap(
+                spacing: 8.0,
+                children: event.interestsInvolved.map((interest) {
+                  return Chip(
+                    label: Text(interest, style: contentStyle),
+                    backgroundColor: Colors.grey[200],
+                  );
+                }).toList(),
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                child: Text('Upload Edits'),
-                onPressed: () {
-                  // Your upload function here
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red, // Button color
-                  onPrimary: Colors.white, // Text color
-                ),
-              ),
+              SizedBox(height: 100),
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to the Edit Event Screen
+          _navigateAndEditEvent(context);
+        },
+        child: Icon(Icons.edit),
+        backgroundColor: Colors.red,
+      ),
     );
+  }
+
+  Future<void> _navigateAndEditEvent(BuildContext context) async {
+    final updatedEvent = await Navigator.push<Event>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditEventScreen(event: event),
+      ),
+    );
+
+    if (updatedEvent != null) {
+      setState(() {
+        event = updatedEvent;
+      });
+    }
   }
 
   Future<String> _getImageUrl(String imagePath) async {

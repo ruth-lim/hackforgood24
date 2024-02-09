@@ -163,8 +163,8 @@ class _AnimatedProgressCardState extends State<AnimatedProgressCard>
                     snapshot.data!['profilePictureURL'] ?? '';
                 return CircleAvatar(
                   radius: 40,
-                  backgroundImage: data['profilePictureURL'] != null
-                      ? NetworkImage('${data['profilePictureURL']}')
+                  backgroundImage: profilePictureURL.isNotEmpty
+                      ? NetworkImage(profilePictureURL)
                       : AssetImage('assets/images/bigatheartavatar.jpg')
                           as ImageProvider,
                 );

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:hackforgood24/pages/admin/bottom_navigation_bar.dart';
 
 class VolunteerProfile extends StatefulWidget {
   static const routeName = '/volunteer_profile';
@@ -100,10 +101,12 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                   SizedBox(height: 20),
                   CircleAvatar(
                     radius: 80, // Increased size of the avatar
-                    backgroundImage: data['profilePictureURL'] != null
+                    backgroundImage: data['profilePictureURL'] != null &&
+                            data['profilePictureURL'].isNotEmpty
                         ? NetworkImage('${data['profilePictureURL']}')
-                        : const AssetImage('assets/images/bigatheartavatar.jpg')
-                            as ImageProvider,
+                            as ImageProvider
+                        : const AssetImage(
+                            'assets/images/bigatheartavatar.jpg'),
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -175,16 +178,16 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                                 // Implement logic to update interested causes
                               },
                             ),
-                            TextFormField(
-                              initialValue:
-                                  '', // Password field not fetched from Firestore
-                              decoration:
-                                  InputDecoration(labelText: 'Password'),
-                              obscureText: true,
-                              onChanged: (value) {
-                                // Implement logic to update password
-                              },
-                            ),
+                            // TextFormField(
+                            //   initialValue:
+                            //       '', // Password field not fetched from Firestore
+                            //   decoration:
+                            //       InputDecoration(labelText: 'Password'),
+                            //   obscureText: true,
+                            //   onChanged: (value) {
+                            //     // Implement logic to update password
+                            //   },
+                            // ),
                             // Add more form fields for other details such as skills and interests
                             SizedBox(height: 20),
                             ElevatedButton(
@@ -205,24 +208,28 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
           return Center(child: Text('No Data'));
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'Event Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.dashboard),
+      //       label: 'Dashboard',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.event),
+      //       label: 'Event Dashboard',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       label: 'Profile',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: Colors.blue,
+      //   onTap: _onItemTapped,
+      // ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemSelected: _onItemTapped,
       ),
     );
   }

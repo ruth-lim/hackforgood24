@@ -19,7 +19,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
 
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,7 +28,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/volunteer_dashboard');
+        Navigator.pushReplacementNamed(context, '/volunteer_homepage');
         break;
       case 1:
         Navigator.pushReplacementNamed(context, '/volunteer_event_dashboard');

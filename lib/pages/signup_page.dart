@@ -52,6 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'username': _usernameController.text,
         'phoneNumber': _phoneNumberController.text,
         'onboardingCompleted': false,
+        'userEvents': const [],
       });
 
       // Display success message
@@ -148,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       keyboardType: TextInputType.phone,
                       validator: (value) {
-                        if (value!.isEmpty || value.length != 10) {
+                        if (value!.isEmpty || value.length != 8) {
                           return 'Please enter a valid phone number!';
                         }
                         return null;

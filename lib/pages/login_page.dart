@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.of(context).pushReplacementNamed('/onboarding');
           } else {
             // Navigate to the volunteer dashboard
-            Navigator.of(context).pushReplacementNamed('/volunteer_dashboard');
+            Navigator.of(context).pushReplacementNamed('/volunteer_homepage');
           }
         }
       }

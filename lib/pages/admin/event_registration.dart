@@ -234,6 +234,7 @@ class _EventRegistrationState extends State<EventRegistration> {
       'interestsInvolved': selectedInterests,
       'description': _descriptionController.text,
       'imageFileName': imageFileName,
+      'volunteersSignedUp': const [],
     });
 
     _showSuccessMessage('Event Uploaded Successfully!');

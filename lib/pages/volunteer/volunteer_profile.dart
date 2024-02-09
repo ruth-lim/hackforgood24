@@ -68,6 +68,12 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
         .update({'profilePictureURL': downloadURL});
   }
 
+  Future<void> _logout() async {
+    await _auth.signOut();
+    Navigator.pushReplacementNamed(
+        context, '/login'); // Navigate to login screen
+  }
+
   @override
   Widget build(BuildContext context) {
     final User? user = _auth.currentUser;
@@ -75,6 +81,12 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: _firestore.collection('users').doc(user?.uid).snapshots(),
@@ -88,7 +100,6 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
             Map<String, dynamic>? data =
                 snapshot.data!.data() as Map<String, dynamic>?;
             if (data != null) {
-              // Convert skills and interests lists to comma-separated strings
               String skills = data['skills'] != null
                   ? (data['skills'] as List).join(', ')
                   : '';
@@ -100,7 +111,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                 children: [
                   SizedBox(height: 20),
                   CircleAvatar(
-                    radius: 80, // Increased size of the avatar
+                    radius: 80,
                     backgroundImage: data['profilePictureURL'] != null &&
                             data['profilePictureURL'].isNotEmpty
                         ? NetworkImage('${data['profilePictureURL']}')
@@ -111,8 +122,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                   SizedBox(height: 10),
                   Text(
                     'Hello, ${data['username']}',
-                    style: TextStyle(
-                        fontSize: 24), // Increased size of the username
+                    style: TextStyle(fontSize: 24),
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
@@ -144,7 +154,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                               decoration:
                                   InputDecoration(labelText: 'Username'),
                               onChanged: (value) {
-                                // Implement logic to update username
+                                data['username'] = value;
                               },
                             ),
                             TextFormField(
@@ -152,7 +162,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                               decoration:
                                   InputDecoration(labelText: 'Email Address'),
                               onChanged: (value) {
-                                // Implement logic to update email address
+                                data['email'] = value;
                               },
                             ),
                             TextFormField(
@@ -160,14 +170,14 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                               decoration:
                                   InputDecoration(labelText: 'Phone Number'),
                               onChanged: (value) {
-                                // Implement logic to update phone number
+                                data['phoneNumber'] = value;
                               },
                             ),
                             TextFormField(
                               initialValue: skills,
                               decoration: InputDecoration(labelText: 'Skills'),
                               onChanged: (value) {
-                                // Implement logic to update skills
+                                skills = value;
                               },
                             ),
                             TextFormField(
@@ -175,24 +185,30 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                               decoration: InputDecoration(
                                   labelText: 'Interested Causes'),
                               onChanged: (value) {
-                                // Implement logic to update interested causes
+                                interests = value;
                               },
                             ),
-                            // TextFormField(
-                            //   initialValue:
-                            //       '', // Password field not fetched from Firestore
-                            //   decoration:
-                            //       InputDecoration(labelText: 'Password'),
-                            //   obscureText: true,
-                            //   onChanged: (value) {
-                            //     // Implement logic to update password
-                            //   },
-                            // ),
                             // Add more form fields for other details such as skills and interests
                             SizedBox(height: 20),
                             ElevatedButton(
-                              onPressed: () {
-                                // Implement logic to update profile details
+                              onPressed: () async {
+                                // Update profile details in Firestore
+                                await _firestore
+                                    .collection('users')
+                                    .doc(user!.uid)
+                                    .update({
+                                  'username': data['username'],
+                                  'email': data['email'],
+                                  'phoneNumber': data['phoneNumber'],
+                                  'skills': skills.split(','),
+                                  'interests': interests.split(','),
+                                });
+
+                                // Show a success message
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Profile updated successfully'),
+                                ));
                               },
                               child: Text('Save'),
                             ),
@@ -208,25 +224,6 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
           return Center(child: Text('No Data'));
         },
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.dashboard),
-      //       label: 'Dashboard',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.event),
-      //       label: 'Event Dashboard',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      //   currentIndex: _selectedIndex,
-      //   selectedItemColor: Colors.blue,
-      //   onTap: _onItemTapped,
-      // ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemSelected: _onItemTapped,

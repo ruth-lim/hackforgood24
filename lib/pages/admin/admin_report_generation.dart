@@ -90,7 +90,7 @@ class _AdminReportState extends State<AdminReport> {
         Navigator.pushNamed(context, '/performance_efficiency');
         break;
       case 8:
-        Navigator.pushNamed(context, '/volunteer_recognition_awards');
+        Navigator.pushNamed(context, '/volunteer_recognition');
         break;
       case 9:
         Navigator.pushNamed(context, '/trends_patterns_analysis');

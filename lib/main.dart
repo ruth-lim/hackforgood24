@@ -10,6 +10,7 @@ import 'package:hackforgood24/pages/admin/events_management.dart';
 import 'package:hackforgood24/pages/admin/reports/activity_participation.dart';
 import 'package:hackforgood24/pages/admin/reports/attendance_time_tracking.dart';
 import 'package:hackforgood24/pages/admin/reports/certificate_request.dart';
+import 'package:hackforgood24/pages/admin/reports/feedback.dart';
 import 'package:hackforgood24/pages/admin/reports/volunteer_enrollment.dart';
 import 'package:hackforgood24/pages/admin/skills_interests_management.dart';
 import 'package:hackforgood24/pages/admin/volunteers_management.dart';
@@ -61,6 +62,8 @@ class MyApp extends StatelessWidget {
             AttendanceTimeTrackingReportPage(),
         CertificateRequestReportPage.routeName: (ctx) =>
             CertificateRequestReportPage(),
+        FeedbackEvaluationReportPage.routeName: (ctx) =>
+            FeedbackEvaluationReportPage(),
       },
       debugShowCheckedModeBanner: false,
     );

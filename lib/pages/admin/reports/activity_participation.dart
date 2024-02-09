@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ActivityParticipationReportPage extends StatelessWidget {
-  static const String routeName = '/activity_participation_report';
+  static const String routeName = '/activity_participation';
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class CertificateRequestReportPage extends StatelessWidget {
-  static const String routeName = '/certificate_request_report';
+  static const String routeName = '/certificate_request';
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,6 @@ class CertificateRequestReportPage extends StatelessWidget {
             DataCell(Text('David Johnson')),
             DataCell(Text('2024-01-20')),
           ]),
-          // Add more rows for additional certificate requests
         ],
       ),
     );

@@ -11,7 +11,9 @@ import 'package:hackforgood24/pages/admin/reports/activity_participation.dart';
 import 'package:hackforgood24/pages/admin/reports/attendance_time_tracking.dart';
 import 'package:hackforgood24/pages/admin/reports/certificate_request.dart';
 import 'package:hackforgood24/pages/admin/reports/feedback.dart';
+import 'package:hackforgood24/pages/admin/reports/financial.dart';
 import 'package:hackforgood24/pages/admin/reports/impact_outcome.dart';
+import 'package:hackforgood24/pages/admin/reports/performance_efficiency.dart';
 import 'package:hackforgood24/pages/admin/reports/volunteer_enrollment.dart';
 import 'package:hackforgood24/pages/admin/skills_interests_management.dart';
 import 'package:hackforgood24/pages/admin/volunteers_management.dart';
@@ -67,6 +69,9 @@ class MyApp extends StatelessWidget {
             FeedbackEvaluationReportPage(),
         ImpactAndOutcomesReportPage.routeName: (ctx) =>
             ImpactAndOutcomesReportPage(),
+        FinancialReportPage.routeName: (ctx) => FinancialReportPage(),
+        PerformanceEfficiencyReportPage.routeName: (ctx) =>
+            PerformanceEfficiencyReportPage(),
       },
       debugShowCheckedModeBanner: false,
     );

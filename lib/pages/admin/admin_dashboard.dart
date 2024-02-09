@@ -23,9 +23,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
         Navigator.pushReplacementNamed(context, '/admin_dashboard');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/admin_events');
-        break;
-      case 2:
         Navigator.pushReplacementNamed(context, '/admin_profile');
         break;
     }

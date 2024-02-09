@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hackforgood24/models/events.dart';
-import 'package:hackforgood24/pages/admin/bottom_navigation_bar.dart';
+import 'package:hackforgood24/pages/volunteer/volunteer_bottom_navigation_bar.dart';
 
 class VolunteerHomePage extends StatefulWidget {
   static const routeName = '/volunteer_homepage';

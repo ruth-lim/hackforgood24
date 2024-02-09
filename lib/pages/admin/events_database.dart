@@ -7,7 +7,7 @@ import 'package:hackforgood24/pages/admin/event_edit_screen.dart';
 import 'package:hackforgood24/pages/admin/attendance_tab.dart';
 
 class EventDatabase extends StatelessWidget {
-  static const routeName = '/event_database';
+  static const routeName = '/events_database';
 
   @override
   Widget build(BuildContext context) {

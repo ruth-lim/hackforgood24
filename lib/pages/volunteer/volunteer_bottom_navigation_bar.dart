@@ -19,6 +19,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'Home',
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.event),
+          label: 'Events',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',
         ),

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:hackforgood24/pages/admin/bottom_navigation_bar.dart';
+import 'package:hackforgood24/pages/volunteer/volunteer_bottom_navigation_bar.dart';
 
 class VolunteerProfile extends StatefulWidget {
   static const routeName = '/volunteer_profile';
@@ -68,10 +68,29 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
         .update({'profilePictureURL': downloadURL});
   }
 
-  Future<void> _logout() async {
-    await _auth.signOut();
-    Navigator.pushReplacementNamed(
-        context, '/login'); // Navigate to login screen
+  Future<void> _confirmLogout() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Logout'),
+          content: Text('Are you sure you want to log out of this account?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _auth.signOut();
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -84,7 +103,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
-            onPressed: _logout,
+            onPressed: _confirmLogout,
           ),
         ],
       ),

@@ -145,7 +145,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             // Button for Report Generation
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/report_generation');
+                Navigator.pushNamed(context, '/admin_report');
               },
               child: Text(
                 'Report Generation',

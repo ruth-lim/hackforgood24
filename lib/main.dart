@@ -3,9 +3,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hackforgood24/pages/admin/admin_dashboard.dart';
 import 'package:hackforgood24/pages/admin/admin_events.dart';
 import 'package:hackforgood24/pages/admin/admin_profile.dart';
+import 'package:hackforgood24/pages/admin/admin_report_generation.dart';
 import 'package:hackforgood24/pages/admin/event_registration.dart';
 import 'package:hackforgood24/pages/admin/events_database.dart';
 import 'package:hackforgood24/pages/admin/events_management.dart';
+import 'package:hackforgood24/pages/admin/reports/activity_participation.dart';
+import 'package:hackforgood24/pages/admin/reports/attendance_time_tracking.dart';
+import 'package:hackforgood24/pages/admin/reports/certificate_request.dart';
+import 'package:hackforgood24/pages/admin/reports/volunteer_enrollment.dart';
 import 'package:hackforgood24/pages/admin/skills_interests_management.dart';
 import 'package:hackforgood24/pages/admin/volunteers_management.dart';
 import 'package:hackforgood24/pages/login_page.dart';
@@ -14,6 +19,7 @@ import 'package:hackforgood24/pages/volunteer/volunteer_event_dashboard.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_onboarding.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_profile.dart';
 import 'pages/signup_page.dart';
+import 'package:hackforgood24/pages/admin/reports/volunteer_enrollment.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +52,15 @@ class MyApp extends StatelessWidget {
         EventDatabase.routeName: (ctx) => EventDatabase(),
         SkillsInterestsManagement.routeName: (ctx) =>
             SkillsInterestsManagement(),
+        AdminReport.routeName: (ctx) => AdminReport(),
+        VolunteerEnrollmentPage.routeName: (ctx) =>
+            VolunteerEnrollmentPage(), // Add this line
+        ActivityParticipationReportPage.routeName: (ctx) =>
+            ActivityParticipationReportPage(),
+        AttendanceTimeTrackingReportPage.routeName: (ctx) =>
+            AttendanceTimeTrackingReportPage(),
+        CertificateRequestReportPage.routeName: (ctx) =>
+            CertificateRequestReportPage(),
       },
       debugShowCheckedModeBanner: false,
     );

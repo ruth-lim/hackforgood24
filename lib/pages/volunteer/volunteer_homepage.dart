@@ -617,6 +617,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       DocumentReference eventRef =
           _firestore.collection('events').doc(event.eventId);
       DocumentReference userRef = _firestore.collection('users').doc(user.uid);
+      DocumentReference attendeeRef =
+          eventRef.collection('attendees').doc(user.uid);
 
       FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot eventSnapshot = await transaction.get(eventRef);
@@ -626,7 +628,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           List<dynamic> volunteersSignedUp =
               List.from(eventSnapshot.get('volunteersSignedUp') ?? []);
           List<dynamic> userEvents =
-              List.from(userSnapshot.get('events') ?? []);
+              List.from(userSnapshot.get('userEvents') ?? []);
 
           if (_isUserSignedUp) {
             // Unregister the user
@@ -643,6 +645,13 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             // Sign up the user
             volunteersSignedUp.add(user.uid);
             userEvents.add(event.eventId);
+            transaction
+                .update(eventRef, {'volunteersSignedUp': volunteersSignedUp});
+            transaction.set(attendeeRef, {
+              'attended': false,
+              'userId': user.uid
+            }); // Create an attendance record
+
             Fluttertoast.showToast(
               msg: "Signed up successfully!",
               toastLength: Toast.LENGTH_LONG,
@@ -654,7 +663,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
           transaction
               .update(eventRef, {'volunteersSignedUp': volunteersSignedUp});
-          transaction.update(userRef, {'events': userEvents});
+          transaction.update(userRef, {'userEvents': userEvents});
 
           setState(() {
             _isUserSignedUp = !_isUserSignedUp;

@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hackforgood24/models/events.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hackforgood24/pages/admin/event_edit_screen.dart';
+import 'package:hackforgood24/pages/admin/attendance_tab.dart';
 
 class EventDatabase extends StatelessWidget {
   static const routeName = '/event_database';
@@ -215,6 +216,36 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(event.title),
+          backgroundColor: Color(0xFFFFD3D3),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => _confirmDelete(context, event),
+            ),
+          ],
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Details'),
+              Tab(text: 'Attendance'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            buildEventDetails(event),
+            AttendanceTab(eventId: event.eventId),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildEventDetails(Event event) {
     TextStyle labelStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.bold,
@@ -227,16 +258,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(event.title),
-        backgroundColor: Color(0xFFFFD3D3),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () => _confirmDelete(context, event),
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -308,7 +329,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 children: event.skillsNeeded.map((skill) {
                   return Chip(
                     label: Text(skill, style: contentStyle),
-                    backgroundColor: Colors.grey[200],
+                    backgroundColor: Colors.blue[100],
                   );
                 }).toList(),
               ),
@@ -320,7 +341,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 children: event.interestsInvolved.map((interest) {
                   return Chip(
                     label: Text(interest, style: contentStyle),
-                    backgroundColor: Colors.grey[200],
+                    backgroundColor: Colors.green[100],
                   );
                 }).toList(),
               ),

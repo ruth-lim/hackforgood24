@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hackforgood24/models/skills_and_interests.dart';
@@ -123,26 +124,40 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _showSaveConfirmation() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Confirm"),
-        content: Text("Are you sure you want to save your selections?"),
-        actions: <Widget>[
-          TextButton(
-            child: Text("Cancel"),
-            onPressed: () => Navigator.pop(context),
-          ),
-          TextButton(
-            child: Text("Save"),
-            onPressed: () {
-              _saveOnboardingData();
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
+    // Check if at least one skill or interest is selected
+    if (_selectedSkills.isEmpty && _selectedInterests.isEmpty) {
+      // Show a message if no selections have been made
+      Fluttertoast.showToast(
+        msg: "Please select at least one skill or interest.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    } else {
+      // Proceed with showing the confirmation dialog
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Confirm"),
+          content: Text("Are you sure you want to save your selections?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text("Save"),
+              onPressed: () {
+                _saveOnboardingData();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _saveOnboardingData() async {

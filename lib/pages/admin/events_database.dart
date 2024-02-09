@@ -76,11 +76,12 @@ class EventDatabase extends StatelessWidget {
                     return Center(child: CircularProgressIndicator());
                   }
                   return GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
-                      mainAxisExtent: 400,
+                      mainAxisExtent: 450,
                     ),
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
@@ -92,6 +93,7 @@ class EventDatabase extends StatelessWidget {
                 },
               ),
             ),
+            SizedBox(height: 80),
           ]),
         ));
   }
@@ -215,6 +217,7 @@ class EventCard extends StatelessWidget {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
+                              overflow: TextOverflow.ellipsis,
                               maxLines: null,
                             ),
                           ),
@@ -423,6 +426,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               SizedBox(height: 8),
               Text('Time:', style: labelStyle),
               Text(event.time, style: contentStyle),
+              SizedBox(height: 8),
+              Text('Duration:', style: labelStyle),
+              Text(event.eventDuration.toString(), style: contentStyle),
               Divider(),
               SizedBox(height: 8),
               Text('Description:', style: labelStyle),

@@ -19,7 +19,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
 
-  int _selectedIndex = 1;
+  int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
     setState(() {

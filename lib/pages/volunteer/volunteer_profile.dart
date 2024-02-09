@@ -102,7 +102,7 @@ class _VolunteerProfileState extends State<VolunteerProfile> {
                     radius: 80, // Increased size of the avatar
                     backgroundImage: data['profilePictureURL'] != null
                         ? NetworkImage('${data['profilePictureURL']}')
-                        : AssetImage('assets/default_profile_image.jpg')
+                        : const AssetImage('assets/images/bigatheartavatar.jpg')
                             as ImageProvider,
                   ),
                   SizedBox(height: 10),

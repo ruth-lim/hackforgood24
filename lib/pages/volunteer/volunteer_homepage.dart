@@ -268,55 +268,65 @@ class EventCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                FutureBuilder<String>(
-                  future: _getImageUrl(event.imageFileName),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Container(
-                        height: 200,
-                        color: Colors.grey[300],
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return Container(
-                        height: 200,
-                        color: Colors.grey[300],
-                        child: Center(
-                          child: Text('Error loading image'),
-                        ),
-                      );
-                    }
-                    return Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12),
-                        ),
-                        image: DecorationImage(
-                          image: NetworkImage(snapshot.data.toString()),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                // Spots left indicator
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.circular(16),
+            FutureBuilder<int>(
+              future: _getSignUps(event.eventId),
+              builder: (context, snapshot) {
+                // Calculate spots left based on the fetched data
+                int spotsLeft = event.volunteersNeeded - (snapshot.data ?? 0);
+                return Stack(
+                  children: [
+                    FutureBuilder<String>(
+                      future: _getImageUrl(event.imageFileName),
+                      builder: (context, snapshot) {
+                        // Image loading logic remains the same
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                            height: 200,
+                            color: Colors.grey[300],
+                          );
+                        }
+                        if (snapshot.hasError) {
+                          return Container(
+                            height: 200,
+                            color: Colors.grey[300],
+                            child: Center(
+                              child: Text('Error loading image'),
+                            ),
+                          );
+                        }
+                        return Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                            image: DecorationImage(
+                              image: NetworkImage(snapshot.data.toString()),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    child: Text(' spots left'),
-                  ),
-                ),
-              ],
+                    // Spots left indicator
+                    Positioned(
+                      left: 10,
+                      top: 10,
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text('${spotsLeft} spots left'),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
             Container(
               alignment: Alignment.topLeft,
@@ -421,6 +431,20 @@ class EventCard extends StatelessWidget {
       print('Error retrieving image URL: $e');
       return '';
     }
+  }
+
+  Future<int> _getSignUps(String eventId) async {
+    DocumentSnapshot eventSnapshot = await FirebaseFirestore.instance
+        .collection('events')
+        .doc(eventId)
+        .get();
+
+    if (eventSnapshot.exists) {
+      List<dynamic> volunteersSignedUp =
+          eventSnapshot.get('volunteersSignedUp') ?? [];
+      return volunteersSignedUp.length;
+    }
+    return 0; // Return 0 if there are no sign-ups
   }
 }
 

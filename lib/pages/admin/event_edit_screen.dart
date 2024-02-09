@@ -412,6 +412,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
         skillsNeeded: _selectedSkills,
         interestsInvolved: _selectedInterests,
         imageFileName: imageFileName!,
+        volunteersSignedUp: widget.event.volunteersSignedUp,
       );
 
       _showSuccessMessage('Event Uploaded Successfully!');

@@ -148,7 +148,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _saveOnboardingData() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    // Update the
     await _firestore.collection('users').doc(uid).update({
       'skills': _selectedSkills,
       'interests': _selectedInterests,
@@ -156,6 +155,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
 
     // Navigate to the main interface
-    Navigator.of(context).pushReplacementNamed('/volunteer_dashboard');
+    Navigator.of(context).pushReplacementNamed('/volunteer_homepage');
   }
 }

@@ -12,7 +12,7 @@ class VolunteerEventDashboard extends StatefulWidget {
 }
 
 class _VolunteerEventDashboardState extends State<VolunteerEventDashboard> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -20,7 +20,7 @@ class _VolunteerEventDashboardState extends State<VolunteerEventDashboard> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/volunteer_dashboard');
+        Navigator.pushReplacementNamed(context, '/volunteer_homepage');
         break;
       case 1:
         Navigator.pushReplacementNamed(context, '/volunteer_event_dashboard');

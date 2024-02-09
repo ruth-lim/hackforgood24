@@ -13,6 +13,7 @@ class Event {
   final List<String> skillsNeeded;
   final List<String> interestsInvolved;
   final String imageFileName;
+  final List<String> volunteersSignedUp;
 
   Event({
     required this.eventId,
@@ -26,6 +27,7 @@ class Event {
     required this.skillsNeeded,
     required this.interestsInvolved,
     required this.imageFileName,
+    this.volunteersSignedUp = const [],
   });
 
   Map<String, dynamic> toMap() {
@@ -41,6 +43,7 @@ class Event {
       'skillsNeeded': skillsNeeded,
       'interestsInvolved': interestsInvolved,
       'imageFileName': imageFileName,
+      'volunteersSignedUp': volunteersSignedUp,
     };
   }
 
@@ -62,6 +65,7 @@ class Event {
       skillsNeeded: List<String>.from(map['skillsNeeded']),
       interestsInvolved: List<String>.from(map['interestsInvolved']),
       imageFileName: map['imageFileName'] ?? '',
+      volunteersSignedUp: List<String>.from(map['volunteersSignedUp'] ?? []),
     );
   }
 }

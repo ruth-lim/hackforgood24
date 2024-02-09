@@ -9,7 +9,7 @@ import 'package:hackforgood24/pages/admin/events_management.dart';
 import 'package:hackforgood24/pages/admin/skills_interests_management.dart';
 import 'package:hackforgood24/pages/admin/volunteers_management.dart';
 import 'package:hackforgood24/pages/login_page.dart';
-import 'package:hackforgood24/pages/volunteer/volunteer_dashboard.dart';
+import 'package:hackforgood24/pages/volunteer/volunteer_homepage.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_event_dashboard.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_onboarding.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_profile.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         SignUpScreen.routeName: (ctx) => SignUpScreen(),
         LoginScreen.routeName: (ctx) => LoginScreen(),
         OnboardingScreen.routeName: (ctx) => OnboardingScreen(),
-        VolunteerDashboard.routeName: (ctx) => VolunteerDashboard(),
+        VolunteerHomePage.routeName: (ctx) => VolunteerHomePage(),
         VolunteerEventDashboard.routeName: (ctx) => VolunteerEventDashboard(),
         VolunteerProfile.routeName: (ctx) => VolunteerProfile(),
         AdminDashboard.routeName: (ctx) => AdminDashboard(),

@@ -8,7 +8,7 @@ class FinancialReportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Financial Report'),
+        title: Text('Expenses Report'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
@@ -16,7 +16,7 @@ class FinancialReportPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Financial Report',
+              'Expenses Report',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),

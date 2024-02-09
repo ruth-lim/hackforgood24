@@ -7,7 +7,7 @@ class VolunteerRecognitionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Volunteer Recognition and Awards Report'),
+        title: Text('Volunteer Recognition Report'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
@@ -15,7 +15,7 @@ class VolunteerRecognitionPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Volunteer Recognition and Awards Report',
+              'Volunteer Recognition Report',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),

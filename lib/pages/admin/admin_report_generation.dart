@@ -127,9 +127,9 @@ class _AdminReportState extends State<AdminReport> {
       'Certificate Request Report',
       'Feedback and Evaluation Report',
       'Impact and Outcomes Report',
-      'Financial Report',
+      'Expenses Report',
       'Performance and Efficiency Report',
-      'Volunteer Recognition and Awards Report',
+      'Volunteer Recognition Report',
       'Trends and Patterns Analysis Report',
     ];
     return titles[index % titles.length];

@@ -26,6 +26,7 @@ class _EventRegistrationState extends State<EventRegistration> {
   final _locationController = TextEditingController();
   final _dateController = TextEditingController();
   final _timeController = TextEditingController();
+  final _eventDurationController = TextEditingController();
   final _descriptionController = TextEditingController();
   int? _volunteersNeeded;
   List<String> _availableSkills = [];
@@ -230,6 +231,7 @@ class _EventRegistrationState extends State<EventRegistration> {
       'organisation': _organisationController.text,
       'location': _locationController.text,
       'dateTime': eventDateTime,
+      'eventDuration': int.parse(_eventDurationController.text),
       'skillsNeeded': selectedSkills,
       'interestsInvolved': selectedInterests,
       'description': _descriptionController.text,
@@ -412,6 +414,22 @@ class _EventRegistrationState extends State<EventRegistration> {
               ),
               SizedBox(height: 24),
 
+              TextFormField(
+                controller: _eventDurationController,
+                decoration:
+                    InputDecoration(labelText: 'Event Duration (hours)'),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the duration of the event.';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 24),
               // Skills
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

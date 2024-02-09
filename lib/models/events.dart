@@ -9,6 +9,7 @@ class Event {
   final String location;
   final String date;
   final String time;
+  final int eventDuration;
   final int volunteersNeeded;
   final List<String> skillsNeeded;
   final List<String> interestsInvolved;
@@ -23,6 +24,7 @@ class Event {
     required this.location,
     required this.date,
     required this.time,
+    required this.eventDuration,
     required this.volunteersNeeded,
     required this.skillsNeeded,
     required this.interestsInvolved,
@@ -39,6 +41,7 @@ class Event {
       'location': location,
       'date': date,
       'time': time,
+      'eventDuration': eventDuration,
       'volunteersNeeded': volunteersNeeded,
       'skillsNeeded': skillsNeeded,
       'interestsInvolved': interestsInvolved,
@@ -61,6 +64,7 @@ class Event {
       location: map['location'] ?? '',
       date: formattedDate,
       time: formattedTime,
+      eventDuration: map['eventDuration'],
       volunteersNeeded: map['volunteersNeeded'],
       skillsNeeded: List<String>.from(map['skillsNeeded']),
       interestsInvolved: List<String>.from(map['interestsInvolved']),

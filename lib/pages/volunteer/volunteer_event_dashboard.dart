@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hackforgood24/pages/admin/bottom_navigation_bar.dart';
+import 'package:hackforgood24/pages/volunteer/volunteer_bottom_navigation_bar.dart';
 
 class VolunteerEventDashboard extends StatefulWidget {
   static const routeName = '/volunteer_event_dashboard';

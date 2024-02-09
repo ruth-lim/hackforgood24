@@ -23,9 +23,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
         Navigator.pushReplacementNamed(context, '/admin_dashboard');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/admin_events');
-        break;
-      case 2:
         Navigator.pushReplacementNamed(context, '/admin_profile');
         break;
     }
@@ -64,6 +61,38 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+  Future<int> _fetchTotalEventsCount() async {
+    final querySnapshot = await _firestore.collection('events').get();
+    return querySnapshot.docs.length;
+  }
+
+  Widget _buildTotalEventsCount() {
+    return FutureBuilder<int>(
+      future: _fetchTotalEventsCount(),
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text(
+            'Loading total events...',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+            'Error fetching total events',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          );
+        } else {
+          return Text(
+            'Total number of Events: ${snapshot.data}',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,11 +110,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             _buildTotalVolunteersCount(),
-            Text(
-              'No. of events upcoming: XX',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
+            _buildTotalEventsCount(),
             SizedBox(height: 48),
 
             // Button for Volunteers Management

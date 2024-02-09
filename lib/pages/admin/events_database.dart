@@ -4,43 +4,98 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hackforgood24/models/events.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hackforgood24/pages/admin/event_edit_screen.dart';
+import 'package:hackforgood24/pages/admin/attendance_tab.dart';
 
 class EventDatabase extends StatelessWidget {
-  static const routeName = '/event_database';
+  static const routeName = '/events_database';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Event Database'),
-        backgroundColor: Color(0xFFFFD3D3),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('events').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              mainAxisExtent: 600,
+        appBar: AppBar(
+          title: Text('Event Database'),
+          backgroundColor: Color(0xFFFFD3D3),
+        ),
+        body: SingleChildScrollView(
+          child: Column(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Search Events',
+                  border: OutlineInputBorder(),
+                ),
+              ),
             ),
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              Event event = Event.fromMap(
-                  snapshot.data!.docs[index].data()! as Map<String, dynamic>);
-              return EventCard(event: event);
-            },
-          );
-        },
-      ),
-    );
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        // Filter button pressed
+                      },
+                      icon: Icon(Icons.filter_list),
+                      label: Text('Filter'),
+                    ),
+                  ),
+                  SizedBox(width: 32),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                        onPressed: () {
+                          // Sort button pressed
+                        },
+                        icon: Icon(Icons.sort),
+                        label: Text('Sort')),
+                  ),
+                ],
+              ),
+            ),
+            // All Events Section
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'All Events',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  )),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height,
+              child: StreamBuilder<QuerySnapshot>(
+                stream:
+                    FirebaseFirestore.instance.collection('events').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                      mainAxisExtent: 450,
+                    ),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      Event event = Event.fromMap(snapshot.data!.docs[index]
+                          .data()! as Map<String, dynamic>);
+                      return EventCard(event: event);
+                    },
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 80),
+          ]),
+        ));
   }
 }
 
@@ -68,104 +123,153 @@ class EventCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Stack(
-              children: [
-                FutureBuilder<String>(
-                  future: _getImageUrl(event.imageFileName),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Container(
-                        height: 200,
-                        color: Colors.grey[300],
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return Container(
-                        height: 200,
-                        color: Colors.grey[300],
-                        child: Center(
-                          child: Text('Error loading image'),
-                        ),
-                      );
-                    }
-                    return Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12),
-                        ),
-                        image: DecorationImage(
-                          image: NetworkImage(snapshot.data.toString()),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                // Spots left indicator
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.circular(16),
+            FutureBuilder<int>(
+              future: _getSignUps(event.eventId),
+              builder: (context, snapshot) {
+                // Calculate spots left based on the fetched data
+                int spotsLeft = event.volunteersNeeded - (snapshot.data ?? 0);
+                return Stack(
+                  children: [
+                    FutureBuilder<String>(
+                      future: _getImageUrl(event.imageFileName),
+                      builder: (context, snapshot) {
+                        // Image loading logic remains the same
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                            height: 200,
+                            color: Colors.grey[300],
+                          );
+                        }
+                        if (snapshot.hasError) {
+                          return Container(
+                            height: 200,
+                            color: Colors.grey[300],
+                            child: Center(
+                              child: Text('Error loading image'),
+                            ),
+                          );
+                        }
+                        return Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                            image: DecorationImage(
+                              image: NetworkImage(snapshot.data.toString()),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    child: Text(' spots left'),
-                  ),
-                ),
-              ],
+                    // Spots left indicator
+                    Positioned(
+                      left: 10,
+                      top: 10,
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text('${spotsLeft} spots left'),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    event.title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 3,
-                  ),
-                  Row(
+            Container(
+              alignment: Alignment.topLeft,
+              child: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
-                        Icons.business,
-                        size: 20,
-                      ),
-                      SizedBox(width: 4),
-                      Flexible(
-                        child: Text(
-                          event.organisation,
-                          overflow: TextOverflow.clip,
+                      Text(
+                        event.title,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: null,
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.business,
+                            size: 20,
+                          ),
+                          SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              event.organisation,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: null,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: 20,
+                          ),
+                          Text(
+                            ' ${event.date} ${event.time}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                      FutureBuilder<int>(
+                        future: _getSignUps(event.eventId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Padding(
+                              padding: const EdgeInsets.all(0),
+                              child: Text('Calculating spots left...'),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Error: ${snapshot.error}'),
+                            );
+                          }
+                          // Calculate spots left
+                          int spotsLeft =
+                              event.volunteersNeeded - snapshot.data!;
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('${snapshot.data} sign ups'),
+                          );
+                        },
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        size: 20,
-                      ),
-                      SizedBox(width: 4),
-                      Text(event.date),
-                      Text(" "),
-                      Text(event.time),
-                    ],
-                  ),
-                  Divider(),
-                  Text('${_getSignUps(event)} sign ups.'),
-                ],
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -186,12 +290,18 @@ class EventCard extends StatelessWidget {
     }
   }
 
-  Future<int?> _getSignUps(Event event) async {
-    QuerySnapshot querySnapshot = await _firestore
-        .collection('users')
-        .where('eventId', isEqualTo: event.eventId)
+  Future<int> _getSignUps(String eventId) async {
+    DocumentSnapshot eventSnapshot = await FirebaseFirestore.instance
+        .collection('events')
+        .doc(eventId)
         .get();
-    return querySnapshot.size;
+
+    if (eventSnapshot.exists) {
+      List<dynamic> volunteersSignedUp =
+          eventSnapshot.get('volunteersSignedUp') ?? [];
+      return volunteersSignedUp.length;
+    }
+    return 0; // Return 0 if there are no sign-ups
   }
 }
 
@@ -215,6 +325,36 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(event.title),
+          backgroundColor: Color(0xFFFFD3D3),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => _confirmDelete(context, event),
+            ),
+          ],
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Details'),
+              Tab(text: 'Attendance'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            buildEventDetails(event),
+            AttendanceTab(eventId: event.eventId),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildEventDetails(Event event) {
     TextStyle labelStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.bold,
@@ -227,16 +367,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(event.title),
-        backgroundColor: Color(0xFFFFD3D3),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () => _confirmDelete(context, event),
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -296,6 +426,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               SizedBox(height: 8),
               Text('Time:', style: labelStyle),
               Text(event.time, style: contentStyle),
+              SizedBox(height: 8),
+              Text('Duration:', style: labelStyle),
+              Text(event.eventDuration.toString(), style: contentStyle),
               Divider(),
               SizedBox(height: 8),
               Text('Description:', style: labelStyle),
@@ -308,7 +441,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 children: event.skillsNeeded.map((skill) {
                   return Chip(
                     label: Text(skill, style: contentStyle),
-                    backgroundColor: Colors.grey[200],
+                    backgroundColor: Colors.blue[100],
                   );
                 }).toList(),
               ),
@@ -320,7 +453,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 children: event.interestsInvolved.map((interest) {
                   return Chip(
                     label: Text(interest, style: contentStyle),
-                    backgroundColor: Colors.grey[200],
+                    backgroundColor: Colors.green[100],
                   );
                 }).toList(),
               ),

@@ -30,6 +30,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
   late TextEditingController _descriptionController;
   late TextEditingController _dateController;
   late TextEditingController _timeController;
+  late TextEditingController _eventDurationController;
   late List<String> _selectedSkills;
   late List<String> _selectedInterests;
   int? _volunteersNeeded;
@@ -329,6 +330,15 @@ class _EditEventScreenState extends State<EditEventScreen> {
               SizedBox(height: 8),
 
               TextFormField(
+                controller: _locationController,
+                decoration:
+                    InputDecoration(labelText: 'Event Duration (hours)'),
+                validator: (value) =>
+                    value!.isEmpty ? 'Duration cannot be empty' : null,
+              ),
+              SizedBox(height: 8),
+
+              TextFormField(
                 controller: _descriptionController,
                 decoration: InputDecoration(labelText: 'Description'),
                 maxLines: 10,
@@ -394,6 +404,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
         'organisation': _organisationController.text,
         'location': _locationController.text,
         'dateTime': eventDateTime,
+        'eventDuration': _eventDurationController.text,
         'skillsNeeded': _selectedSkills,
         'interestsInvolved': _selectedInterests,
         'description': _descriptionController.text,
@@ -408,6 +419,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
         description: _descriptionController.text,
         date: _dateController.text,
         time: _timeController.text,
+        eventDuration: int.parse(_eventDurationController.text),
         volunteersNeeded: _volunteersNeeded ?? 0,
         skillsNeeded: _selectedSkills,
         interestsInvolved: _selectedInterests,

@@ -59,13 +59,13 @@ Before you begin, ensure you have the following installed:
 
 #### Dashboard
 
-- **Metrics**: Displays total number of volunteers, total hours logged, and other key metrics.
+- **Metrics**: Displays total number of volunteers, total number of events, and other key metrics.
 
 #### Activity Management
 
 - **Event Creation**: An interface to add new volunteer events, including title, location, date, time, and the number of volunteers needed.
 - **Volunteer Spreadsheet**: Manages the list of volunteers signed up for each event.
-- **Volunteer Addition**: Allows admins to add vetted volunteers to events manually.
+- **Volunteer Attendance**: Allows admins to track volunteers' attendance for events manually.
 
 #### Certificate Page
 

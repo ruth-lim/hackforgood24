@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hackforgood24/pages/volunteer/volunteer_bottom_navigation_bar.dart';
+import 'package:hackforgood24/pages/volunteer/certificate_request.dart'; // Import the CertificateRequestForm widget
 
 class VolunteerEventDashboard extends StatefulWidget {
   static const routeName = '/volunteer_event_dashboard';
@@ -23,7 +24,7 @@ class _VolunteerEventDashboardState extends State<VolunteerEventDashboard> {
         Navigator.pushReplacementNamed(context, '/volunteer_homepage');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/volunteer_event_dashboard');
+        // No need to navigate if already on the same page
         break;
       case 2:
         Navigator.pushReplacementNamed(context, '/volunteer_profile');
@@ -98,8 +99,7 @@ class _AnimatedProgressCardState extends State<AnimatedProgressCard>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration:
-          const Duration(seconds: 2), // You can adjust the animation duration
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
 
@@ -143,7 +143,7 @@ class _AnimatedProgressCardState extends State<AnimatedProgressCard>
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Make the card fit to content
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "You're off to a great start!",
@@ -188,6 +188,19 @@ class _AnimatedProgressCardState extends State<AnimatedProgressCard>
               '${widget.hoursClocked.toStringAsFixed(1)} hours clocked',
               style: Theme.of(context).textTheme.caption,
             ),
+            SizedBox(height: 16.0), // Add space between progress bar and button
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the certificate request form
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CertificateRequestForm(),
+                  ),
+                );
+              },
+              child: Text('Request Certificate'),
+            ),
           ],
         ),
       ),
@@ -221,4 +234,12 @@ class EventCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    title: 'Volunteer Event Dashboard Demo',
+    theme: ThemeData(primarySwatch: Colors.blue),
+    home: VolunteerEventDashboard(),
+  ));
 }

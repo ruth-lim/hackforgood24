@@ -1,4 +1,4 @@
-# Volunteer Management System README
+# Volunteer Management System
 
 ## Overview
 

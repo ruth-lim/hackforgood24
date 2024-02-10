@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'bottom_navigation_bar.dart';
+import 'package:hackforgood24/pages/volunteer/volunteer_bottom_navigation_bar.dart';
 import 'package:hackforgood24/pages/admin/reports/volunteer_enrollment.dart';
 
 class AdminReport extends StatefulWidget {

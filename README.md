@@ -17,15 +17,15 @@ Before you begin, ensure you have the following installed:
 
 ### Setting Up the Development Environment
 
-1. **Clone the Repository**: Start by cloning the project repository to your local machine using Git.
-2. **Navigate to the Project Directory**: Change into the project directory from your terminal.
-3. **Get Flutter Dependencies**: Run the following command to fetch all the required Flutter packages for the project.
+1. **Clone the Repository**: Start by cloning the project repository to your local machine using Git [`git clone https://example.com/vms.git`.
+2. **Navigate to the Project Directory**: Change into the project directory from your terminal. [`cd vms`]
+3. **Get Flutter Dependencies**: Run the following command `flutter pub get` to fetch all the required Flutter packages for the project.
 4. **Open the Project in Your IDE**: Launch your preferred IDE and open the project folder you've just cloned.
 
 ### Running the Project
 
 1. **Choose a Target Device**: Ensure you have an emulator running or a physical device connected to your computer.
-2. **Run the App**: Execute the following command in your terminal or use the run button in your IDE.
+2. **Run the App**: Execute the following command `flutter run` in your terminal or use the run button in your IDE.
 
 ### Troubleshooting
 

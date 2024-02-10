@@ -61,7 +61,7 @@ The Login page provides a straightforward mechanism for users to access their ac
 
 Login credentials are verified against our secure backend to grant access. Users also have the option to reset their password if forgotten.
 
-## Security Measures
+### Security Measures
 
 Our application employs state-of-the-art security practices to protect user information and privacy. Passwords are encrypted, and data transmission is secured using SSL encryption. Additionally, our authentication system integrates with Firebase Authentication, providing reliable and scalable user management.
 

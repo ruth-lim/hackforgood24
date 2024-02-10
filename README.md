@@ -17,9 +17,7 @@ The Volunteer Management System is designed to streamline the process of managin
 
 - **Event Registration**: Features buttons to register for specific events.
 - **Event Details**: Displays time, location, special skills required, and the current number of enrolled volunteers.
-- **Notifications**: Informs volunteers if they are successfully registered for an event and offers an option to add the event to their Google Calendar.
 - **Post-Event Satisfaction Form**: After event participation, volunteers are prompted to fill out a satisfaction survey.
-- **Time Sheet**: A record of all events a volunteer has attended, including hours contributed.
 
 #### Request Certificate Page
 
@@ -48,15 +46,43 @@ The Volunteer Management System is designed to streamline the process of managin
 
 #### Reports Page
 
-- **VIA Certificate Eligibility**: Lists volunteers eligible for official recognition or certificates.
-- **Outcome-Based Reports**: Provides data on the number and types of events conducted over specified periods.
-- **Volunteer Data**:
-  - Volunteer retention rates.
-  - Referral sources for new volunteers.
-  - Demographics of volunteers.
-  - Number of volunteers who also make donations.
-  - Results from satisfaction surveys (volunteers, staff, clients).
-  - Total volunteer hours and their monetary equivalent.
+The Reports Page in the Volunteer Management System (VMS) serves as a vital analytics and reporting hub, designed to provide administrators and program managers with in-depth insights into volunteer engagement, program outcomes, and organizational impact. Below is a detailed overview of the reports available:
+
+1. Volunteer Enrollment and Demographics Report
+Overview: Offers comprehensive data on volunteer demographics, including age, gender, location, and occupation.
+Purpose: Facilitates targeted recruitment and helps understand the volunteer base for better engagement strategies.
+2. Activity Participation Report
+Overview: Details volunteer participation across various activities, highlighting the number of participants, hours contributed, and activity types.
+Purpose: Provides insights into the popularity and engagement levels of different volunteer activities.
+3. Attendance and Time Tracking Report
+Overview: Tracks volunteer attendance at events and activities, including detailed hours volunteered by each participant.
+Purpose: Ensures accurate recording of volunteer contributions and supports program accountability.
+4. Certificate Request Report
+Overview: Lists all certificate requests by volunteers, including the type of certificate, request date, and relevant activity.
+Purpose: Streamlines the process of recognizing volunteer efforts through certificates.
+5. Feedback and Evaluation Report
+Overview: Collects and summarizes volunteer feedback on their experience, pinpointing areas of satisfaction and suggestions for improvement.
+Purpose: Informs program improvements and strategies to enhance volunteer satisfaction and retention.
+6. Impact and Outcomes Report
+Overview: Assesses the impact of volunteer activities on the community, detailing metrics such as people served and resources deployed.
+Purpose: Demonstrates the tangible outcomes and effectiveness of volunteer efforts.
+7. Financial Report
+Overview: Provides a breakdown of expenses related to volunteer activities, including materials, venue rentals, and other costs.
+Purpose: Aids in financial planning and budgeting for volunteer-related expenses.
+8. Performance and Efficiency Report
+Overview: Evaluates program performance and efficiency, using metrics such as volunteer retention rate and cost per volunteer hour.
+Purpose: Highlights opportunities for operational improvements and efficiency gains.
+9. Volunteer Recognition and Awards Report
+Overview: Features volunteers who have shown exceptional dedication or impact, recognizing their contributions to the organization.
+Purpose: Promotes a culture of appreciation and motivates volunteers through recognition.
+10. Trends and Patterns Analysis Report
+Overview: Analyzes long-term trends in volunteer participation, identifying popular activities, seasonal variations, and emerging preferences.
+Purpose: Guides strategic planning and program development with insights into volunteer engagement patterns.
+
+##### Accessing and Utilizing Reports
+Navigation: These reports can be accessed through the dedicated Reports Page on the admin dashboard.
+Customization: Users have the ability to customize reports based on specific criteria such as date ranges, activities, and demographics.
+Export: For further analysis or presentation purposes, reports can be exported in various formats.
 
 ## Getting Started
 
@@ -72,40 +98,5 @@ The Volunteer Management System is designed to streamline the process of managin
 2. **Volunteer Management**: Keep track of volunteer sign-ups, attendance, and post-event feedback.
 3. **Reporting**: Generate reports to analyze volunteer engagement, event impact, and overall program success.
 
-## Support
 
-For any issues or inquiries, please contact [support email/phone number].
 
----
-
-This README is intended to provide a comprehensive guide to both volunteers and administrators on how to utilize the Volunteer Management System effectively for the betterment of the organization and its volunteer community.
-# hackforgood24
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application that follows the
-[simple app state management
-tutorial](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple).
-
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-## Assets
-
-The `assets` directory houses images, fonts, and any other files you want to
-include with your application.
-
-The `assets/images` directory contains [resolution-aware
-images](https://flutter.dev/docs/development/ui/assets-and-images#resolution-aware).
-
-## Localization
-
-This project generates localized messages based on arb files found in
-the `lib/src/localization` directory.
-
-To support additional languages, please visit the tutorial on
-[Internationalizing Flutter
-apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)

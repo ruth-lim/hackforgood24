@@ -75,6 +75,8 @@ class MyApp extends StatelessWidget {
         VolunteerRecognitionPage.routeName: (ctx) => VolunteerRecognitionPage(),
         TrendsPatternsAnalysisPage.routeName: (ctx) =>
             TrendsPatternsAnalysisPage(),
+        CertificateRequestReportPage.routeName: (ctx) =>
+            CertificateRequestReportPage(),
       },
       debugShowCheckedModeBanner: false,
     );

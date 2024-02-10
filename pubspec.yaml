@@ -23,6 +23,11 @@ dependencies:
   intl: ^0.18.1
   path: ^1.8.3
   fl_chart: ^0.36.0
+  image: ^3.0.1
+  pdf: ^3.6.0
+  path_provider: ^2.0.3
+  url_launcher: ^6.0.13
+  open_file: ^3.3.2
 
 dev_dependencies:
   flutter_test:
@@ -39,3 +44,4 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/fonts/

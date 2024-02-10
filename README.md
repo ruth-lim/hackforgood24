@@ -33,6 +33,38 @@ Before you begin, ensure you have the following installed:
 
 ## System Features
 
+### Sign-Up Page
+
+The Sign-Up page allows new users to create an account by providing necessary information across several fields. Here are the fields included in the sign-up process:
+
+- **Email**: Users must provide a valid email address that will be used for account verification and communication purposes.
+- **Password**: A strong password is required for account security. The password must meet our minimum security criteria (e.g., a minimum of 8 characters).
+- **Confirm Password**: Users must re-enter their password to confirm accuracy.
+- **Username**: A unique username for the user's profile. This name will be visible to other users of the application.
+- **Phone Number**: Users are required to provide a phone number for account recovery and security verification.
+- **Date of Birth**: To ensure compliance with age restrictions, users must provide their date of birth.
+- **Gender**: Users have the option to specify their gender. This field is optional and can be left unspecified if desired.
+- **Occupation & School**: For users who wish to share professional or educational information, these fields allow for the input of occupation details and school name.
+- **Educational Background**: Users can select their highest level of education from a dropdown menu.
+- **Availability**: Users can specify their availability for participation in events or activities.
+- **Driving Status & Vehicle Ownership**: These fields are specifically designed for applications requiring information about the user's ability to drive and vehicle ownership status.
+- **Skills & Interests**: Users can list their skills and interests to better match with relevant activities or groups within the app.
+- **Commitment Level**: Users can indicate whether they are looking for ad-hoc participation opportunities or are interested in regular commitments.
+- **Immigration Status**: This field allows users to select their immigration status from a predefined list of options.
+
+### Login Page
+
+The Login page provides a straightforward mechanism for users to access their accounts:
+
+- **Email**: Users enter their registered email address.
+- **Password**: Users enter their password.
+
+Login credentials are verified against our secure backend to grant access. Users also have the option to reset their password if forgotten.
+
+## Security Measures
+
+Our application employs state-of-the-art security practices to protect user information and privacy. Passwords are encrypted, and data transmission is secured using SSL encryption. Additionally, our authentication system integrates with Firebase Authentication, providing reliable and scalable user management.
+
 ### Volunteer Interface
 
 #### Dashboard
@@ -52,8 +84,25 @@ Before you begin, ensure you have the following installed:
 
 #### Profile and Settings
 
-- **Edit Personal Information**: Volunteers can update their contact details and personal information.
-- **Skill Sets and Interests**: A section for volunteers to add or update their skills and interests.
+The Profile Editing page enables users to update various details and preferences associated with their account. Here are the features available in the profile editing section:
+
+- **Profile Picture**: Users can upload or change their profile picture by selecting an image from their device's gallery.
+- **Username**: Users can modify their displayed username.
+- **Email Address**: This field allows users to update their registered email address. Changes to the email address require re-verification for security purposes.
+- **Phone Number**: Users can update their phone number associated with the account.
+- **Date of Birth**: Allows users to change their date of birth if necessary.
+- **Gender**: Users have the option to specify or update their gender.
+- **Occupation & School**: Fields for users to update their occupation details and school name.
+- **Educational Background**: Users can select their current or highest level of education from a dropdown menu.
+- **Availability**: Users can specify their availability for participation in events or activities.
+- **Driving Status & Vehicle Ownership**: Allows users to update information about their driving status and vehicle ownership.
+- **Skills & Interests**: Users can add or remove skills and interests to better match with relevant activities or groups within the app.
+- **Commitment Level**: Users can update their preference for ad-hoc or regular participation opportunities.
+- **Immigration Status**: Allows users to update their immigration status from a predefined list of options.
+
+### Saving Changes
+
+Once users have made the desired updates to their profile, they can save the changes using the "Save Changes" button. Upon clicking this button, the modified information is sent to the server and updated in the database.
 
 ### Admin Interface
 

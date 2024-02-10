@@ -17,8 +17,8 @@ Before you begin, ensure you have the following installed:
 
 ### Setting Up the Development Environment
 
-1. **Clone the Repository**: Start by cloning the project repository to your local machine using Git [`git clone https://example.com/vms.git`.
-2. **Navigate to the Project Directory**: Change into the project directory from your terminal. [`cd vms`]
+1. **Clone the Repository**: Start by cloning the project repository to your local machine using Git [`git clone [https://example.com/vms.git](https://github.com/ruth-lim/hackforgood24.git)`.
+2. **Navigate to the Project Directory**: Change into the project directory from your terminal. [`cd hackforgood24`]
 3. **Get Flutter Dependencies**: Run the following command `flutter pub get` to fetch all the required Flutter packages for the project.
 4. **Open the Project in Your IDE**: Launch your preferred IDE and open the project folder you've just cloned.
 
